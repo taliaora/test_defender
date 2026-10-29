@@ -1,0 +1,8 @@
+Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Windows Defender/Operational'; Id=5007; StartTime='2026-10-26'} |
+  ForEach-Object {
+    $old = if ($_.Message -match 'Old value:\s*(.*)') { $matches[1].Trim() }
+    $new = if ($_.Message -match 'New value:\s*(.*)') { $matches[1].Trim() }
+    [pscustomobject]@{ Time = $_.TimeCreated; Old = $old; New = $new }
+  } |
+  Where-Object { "$($_.Old) $($_.New)" -notmatch 'Signature|SignatureUpdate|Engine|Platform|RemediationScan|LastUpdate|SharedSignatureRoot|ProductAppDataPath' } |
+  Format-Table -AutoSize -Wrap
