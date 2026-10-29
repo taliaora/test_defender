@@ -1,0 +1,3 @@
+Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Windows Defender/Operational'; StartTime='2026-10-26'} |
+  Where-Object { $_.Id -in 1116,1117,5001,5004,5007,5010,5012 } |
+  Select-Object TimeCreated, Id, Message | Format-List
